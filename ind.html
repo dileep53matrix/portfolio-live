@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Developer Portfolio Dashboard</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Configure Tailwind for a modern, dark theme -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'github-dark': '#010409',
+                        'card-bg': '#161b22',
+                        'accent-blue': '#2f81f7',
+                        'accent-green': '#3fb950',
+                        'accent-yellow': '#d29922',
+                        'text-primary': '#c9d1d9',
+                        'text-secondary': '#8b949e',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'fade-in': 'fadeIn 0.5s ease-out forwards',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom styles for the progress circle animation */
+        .progress-circle {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(47, 129, 247, 0.2); /* Subtle glow */
+        }
+
+        .progress-circle::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            height: 90%;
+            background-color: #161b22; /* Card background color */
+            border-radius: 50%;
+            z-index: 2;
+        }
+
+        .progress-indicator {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(var(--color) 0%, var(--color) var(--percent), #010409 var(--percent), #010409 100%);
+            z-index: 1;
+            transition: background 1.5s ease-out;
+        }
+
+        .progress-label {
+            position: relative;
+            z-index: 3;
+            text-align: center;
+        }
+
+        /* General dashboard styling */
+        body {
+            background-color: #010409;
+            color: #c9d1d9;
+            min-height: 100vh;
+            padding-bottom: 40px;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+</head>
+<body class="font-sans">
+
+    <div id="dashboard" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10">
+
+        <!-- Header: Profile Summary -->
+        <header class="mb-10 p-6 bg-card-bg rounded-xl shadow-2xl flex flex-col md:flex-row items-center animate-[fade-in_0.5s_ease-out_forwards]">
+            <img class="w-24 h-24 rounded-full border-4 border-accent-blue mr-6 mb-4 md:mb-0 animate-pulse-slow"
+                 src="https://placehold.co/96x96/2f81f7/c9d1d9?text=JD"
+                 alt="Profile Picture">
+            <div>
+                <h1 class="text-3xl font-bold text-text-primary">Jane Doe / <span class="text-accent-blue">@janedev</span></h1>
+                <p class="text-lg text-text-secondary mt-1">Full Stack Developer | Focused on scalable solutions and clean architecture.</p>
+                <div class="mt-3 flex space-x-4 text-sm text-text-secondary">
+                    <span class="flex items-center"><svg class="w-4 h-4 mr-1 text-accent-green" fill="currentColor" viewBox="0 0 20 20"><path d="M2 10a8 8 0 1116 0A8 8 0 012 10zm6.5-5.5a1 1 0 10-2 0 1 1 0 002 0zM10 8a1 1 0 011 1v4a1 1 0 11-2 0V9a1 1 0 011-1z" clip-rule="evenodd" fill-rule="evenodd"></path></svg> 5 Years Experience</span>
+                    <span class="flex items-center"><svg class="w-4 h-4 mr-1 text-accent-blue" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a8 8 0 100 16 8 8 0 000-16zM6 9a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm0 4a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1z" clip-rule="evenodd" fill-rule="evenodd"></path></svg> 42 Repositories</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <!-- COLUMN 1: Key Performance Indicators (Squares) -->
+            <section class="lg:col-span-1 space-y-8">
+                <h2 class="text-2xl font-semibold text-text-primary mb-4">Key Performance Indicators</h2>
+                <div class="grid grid-cols-2 gap-4" id="stat-cards">
+                    <!-- Stat Cards will be injected here -->
+                </div>
+            </section>
+
+            <!-- COLUMN 2: Analytical Data (Circles) -->
+            <section class="lg:col-span-1">
+                <h2 class="text-2xl font-semibold text-text-primary mb-4">Code Quality & Efficiency</h2>
+                <div class="grid grid-cols-2 md:grid-cols-2 gap-6 place-items-center p-6 bg-card-bg rounded-xl shadow-xl" id="progress-charts">
+                    <!-- Progress Circles will be injected here -->
+                </div>
+            </section>
+
+            <!-- COLUMN 3: Recent Activity & Repositories -->
+            <section class="lg:col-span-1 space-y-8">
+                
+                <h2 class="text-2xl font-semibold text-text-primary mb-4">Recent Activity</h2>
+                <div class="p-6 bg-card-bg rounded-xl shadow-xl">
+                    <ul class="space-y-4 text-sm" id="activity-feed">
+                        <!-- Activity Feed will be injected here -->
+                    </ul>
+                </div>
+
+                <h2 class="text-2xl font-semibold text-text-primary mb-4">Top Repositories</h2>
+                <div class="p-6 bg-card-bg rounded-xl shadow-xl">
+                    <ul class="space-y-4" id="repo-list">
+                        <!-- Repository List will be injected here -->
+                    </ul>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        // --- Simulated Data for the Dashboard ---
+        const mockData = {
+            stats: [
+                { title: "Total Commits (2025)", value: "1,850", icon: "M10 2a8 8 0 100 16 8 8 0 000-16zM8 12a1 1 0 01-1-1V9a1 1 0 012 0v2a1 1 0 01-1 1zm4 0a1 1 0 01-1-1V9a1 1 0 012 0v2a1 1 0 01-1 1z", color: "text-accent-green" },
+                { title: "Issues Resolved", value: "98", icon: "M9 12l2 2 4-4m5.617 3.383a.75.75 0 000-1.06L18.06 4.72a.75.75 0 00-1.06 0L10.5 11.22l-4-4a.75.75 0 00-1.06 0L2.94 13.94a.75.75 0 000 1.06l1.06 1.06a.75.75 0 001.06 0L10.5 10.22l4 4a.75.75 0 001.06 0l1.06-1.06a.75.75 0 000-1.06z", color: "text-accent-blue" },
+                { title: "Pull Requests Merged", value: "212", icon: "M12 4a8 8 0 100 16 8 8 0 000-16zM7 9h6m-6 4h6m-2-7V4", color: "text-accent-yellow" },
+                { title: "Projects Contributed", value: "7", icon: "M4 6a2 2 0 012-2h12a2 2 0 012 2v10a2 2 0 01-2 2H6a2 2 0 01-2-2V6z", color: "text-text-primary" }
+            ],
+            charts: [
+                { label: "Code Coverage", percent: 92, color: "accent-green" },
+                { label: "Issue Closure Rate", percent: 85, color: "accent-blue" },
+                { label: "Test Reliability", percent: 78, color: "accent-yellow" },
+                { label: "Documentation Index", percent: 96, color: "text-primary" }
+            ],
+            activities: [
+                { time: "2 hours ago", description: "Merged pull request in <span class='text-accent-blue font-medium'>api-gateway</span>" },
+                { time: "Yesterday", description: "Resolved 5 critical issues in <span class='text-accent-green font-medium'>data-pipeline</span>" },
+                { time: "3 days ago", description: "Pushed 18 commits to <span class='text-accent-yellow font-medium'>portfolio-v3</span>" },
+                { time: "1 week ago", description: "Reviewed code for <span class='text-text-primary font-medium'>auth-service</span>" },
+            ],
+            repositories: [
+                { name: "Scalable-Microservices", description: "High-performance architecture boilerplate.", language: "Go", stars: 1.2, forks: 25 },
+                { name: "React-State-Manager", description: "Custom state management utility.", language: "TypeScript", stars: 850, forks: 110 },
+                { name: "Serverless-Analytics", description: "Real-time data processing with AWS Lambda.", language: "Python", stars: 420, forks: 60 },
+            ]
+        };
+
+        // --- Core Rendering Functions ---
+
+        /**
+         * Creates an SVG icon element.
+         * @param {string} pathD - The 'd' attribute for the SVG path.
+         * @param {string} colorClass - Tailwind color class for the icon.
+         */
+        const createSvgIcon = (pathD, colorClass) => `
+            <svg class="w-6 h-6 ${colorClass}" fill="currentColor" viewBox="0 0 20 20">
+                <path d="${pathD}" clip-rule="evenodd" fill-rule="evenodd"></path>
+            </svg>
+        `;
+
+        /**
+         * Renders the square KPI cards.
+         */
+        function renderStatCards() {
+            const container = document.getElementById('stat-cards');
+            container.innerHTML = mockData.stats.map((stat, index) => `
+                <div class="bg-card-bg p-4 rounded-xl shadow-lg border border-gray-700 hover:border-accent-blue transition duration-300 animate-[fade-in_0.5s_ease-out_${index*100}ms_forwards] opacity-0">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-sm font-semibold text-text-secondary">${stat.title}</h3>
+                        ${createSvgIcon(stat.icon, stat.color)}
+                    </div>
+                    <p class="text-3xl font-extrabold text-text-primary">${stat.value}</p>
+                </div>
+            `).join('');
+        }
+
+        /**
+         * Creates and animates a progress circle using conic gradients.
+         * @param {number} percent - The percentage value (0-100).
+         * @param {string} colorClass - Tailwind color class suffix (e.g., 'accent-blue').
+         * @param {string} label - The text label.
+         */
+        function createProgressCircle(percent, colorClass, label, index) {
+            const colorMap = {
+                'accent-green': '#3fb950',
+                'accent-blue': '#2f81f7',
+                'accent-yellow': '#d29922',
+                'text-primary': '#c9d1d9'
+            };
+            const hexColor = colorMap[colorClass] || colorMap['text-primary'];
+
+            return `
+                <div class="flex flex-col items-center space-y-2 animate-[fade-in_0.5s_ease-out_${index*150}ms_forwards] opacity-0">
+                    <div class="progress-circle">
+                        <div class="progress-indicator" style="--percent: 0%; --color: ${hexColor};" data-percent="${percent}"></div>
+                        <div class="progress-label">
+                            <p class="text-xl font-bold text-text-primary">${percent}<span class="text-sm">%</span></p>
+                        </div>
+                    </div>
+                    <span class="text-xs text-text-secondary uppercase tracking-wider">${label}</span>
+                </div>
+            `;
+        }
+
+        /**
+         * Renders the circular progress charts and applies the animation.
+         */
+        function renderProgressCharts() {
+            const container = document.getElementById('progress-charts');
+            container.innerHTML = mockData.charts.map((chart, index) =>
+                createProgressCircle(chart.percent, chart.color, chart.label, index)
+            ).join('');
+
+            // Apply animation logic after rendering
+            setTimeout(() => {
+                document.querySelectorAll('.progress-indicator').forEach(indicator => {
+                    const targetPercent = indicator.dataset.percent;
+                    // Force a re-render/style update before setting the final value
+                    indicator.style.background = indicator.style.background; // Trick to reset
+                    requestAnimationFrame(() => {
+                        indicator.style.setProperty('--percent', `${targetPercent}%`);
+                    });
+                });
+            }, 100); // Small delay to ensure DOM is fully ready for transitions
+        }
+
+        /**
+         * Renders the recent activity feed.
+         */
+        function renderActivityFeed() {
+            const container = document.getElementById('activity-feed');
+            container.innerHTML = mockData.activities.map((activity, index) => `
+                <li class="flex items-start space-x-3 pb-3 border-b border-gray-800 last:border-b-0 animate-[fade-in_0.5s_ease-out_${index*100+200}ms_forwards] opacity-0">
+                    <svg class="w-4 h-4 mt-1 text-accent-blue flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" fill-rule="evenodd"></path><path d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" fill-rule="evenodd"></path></svg>
+                    <div class="flex-grow">
+                        <p class="text-text-primary" >${activity.description}</p>
+                        <span class="text-xs text-text-secondary">${activity.time}</span>
+                    </div>
+                </li>
+            `).join('');
+        }
+
+        /**
+         * Renders the top repositories list.
+         */
+        function renderRepoList() {
+            const container = document.getElementById('repo-list');
+            container.innerHTML = mockData.repositories.map((repo, index) => `
+                <li class="bg-card-bg border border-gray-700 p-4 rounded-lg hover:bg-gray-800 transition duration-300 animate-[fade-in_0.5s_ease-out_${index*100+300}ms_forwards] opacity-0">
+                    <h4 class="text-lg font-semibold text-accent-blue">${repo.name}</h4>
+                    <p class="text-sm text-text-secondary mt-1">${repo.description}</p>
+                    <div class="flex space-x-4 mt-2 text-xs text-text-secondary">
+                        <span class="flex items-center"><span class="w-2 h-2 rounded-full mr-1 ${repo.language === 'TypeScript' ? 'bg-blue-500' : repo.language === 'Go' ? 'bg-cyan-500' : 'bg-yellow-500'}"></span>${repo.language}</span>
+                        <span class="flex items-center"><svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.638-.921 1.94 0l1.838 5.688a1 1 0 00.95.691h5.972c.969 0 1.372 1.24.588 1.81l-4.832 3.518a1 1 0 00-.364 1.118l1.838 5.688c.3.921-.755 1.688-1.542 1.118l-4.832-3.518a1 1 0 00-1.176 0l-4.832 3.518c-.787.57-1.842-.197-1.542-1.118l1.838-5.688a1 1 0 00-.364-1.118L2.055 10.117c-.784-.57-.381-1.81.588-1.81h5.972a1 1 0 00.95-.691l1.838-5.688z"></path></svg>${repo.stars}k</span>
+                        <span class="flex items-center"><svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20"><path d="M12 11.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5zm-7.5-2.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5zm11 0a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM4.793 6.646a.5.5 0 01.707 0L7.5 9.5l-2 2L.5 7.5l4.293-4.293zM10 14.5l-2.707-2.707a.5.5 0 01.707-.707L10 13.086l2.707-2.707a.5.5 0 01.707.707L10 14.5z" clip-rule="evenodd" fill-rule="evenodd"></path></svg>${repo.forks}</span>
+                    </div>
+                </li>
+            `).join('');
+        }
+
+        /**
+         * Initializes and renders the entire dashboard.
+         */
+        function initializeDashboard() {
+            renderStatCards();
+            renderProgressCharts();
+            renderActivityFeed();
+            renderRepoList();
+        }
+
+        // Run the initialization when the window loads
+        window.onload = initializeDashboard;
+
+    </script>
+</body>
+</html>
